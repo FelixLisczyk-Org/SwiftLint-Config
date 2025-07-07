@@ -1,0 +1,64 @@
+disabled_rules:
+  - line_length
+  - file_length
+  - type_body_length
+  - function_body_length
+  - function_parameter_count
+  - todo
+  - cyclomatic_complexity
+  - force_cast
+  - force_try
+  - weak_delegate
+  - class_delegate_protocol
+  - type_name
+  - nesting
+  - inclusive_language
+  - blanket_disable_command
+excluded:
+  - .build
+  - .swiftpm
+  - Tuist/.build
+identifier_name:
+  max_length: 60
+  min_length: 1
+custom_rules:
+  sf_safe_symbol:
+    name: "Safe SFSymbol"
+    message: 'Replace string-based system symbol with SFSafeSymbols: Change `Image(systemName: "symbol.name")` to `Image(systemSymbol: .symbolName)`, `NSImage(systemSymbolName: "symbol.name")` to `NSImage(systemSymbol: .symbolName)`, `Label("text", systemImage: "symbol.name")` to `Label("text", systemSymbol: .symbolName)`, and `UIApplicationShortcutIcon(systemImageName: "symbol.name")` to `UIApplicationShortcutIcon(systemSymbol: .symbolName)`'
+    regex: "(Image\\(systemName:)|(NSImage\\(systemSymbolName:)|(Label[^,]+?,\\s*systemImage:)|(UIApplicationShortcutIcon\\(systemImageName:)"
+    severity: warning
+  attributed_string_initializer:
+    name: "FoundationKit: Attributed String - Initializer"
+    message: "Replace NSAttributedString dictionary-based initializer with type-safe version: Change `NSAttributedString(string: text, attributes: [.foregroundColor: color])` to `NSAttributedString(text, attributes: .foregroundColor(color))` using FoundationKit's typed attribute methods"
+    regex: "(?-s)((NSAttributedString|.init)\\(string:.*, attributes: \\[.*)"
+    severity: warning
+  attributed_string_read_attributes:
+    name: "FoundationKit: Attributed String - Read Attributes"
+    message: "Replace `enumerateAttribute(.attributeName, ...)` with type-safe `attributes(.attributeName)` method from FoundationKit"
+    regex: "(?-s)(enumerateAttribute\\(\\..*)"
+    severity: warning
+  attributed_string_read_any_attribute:
+    name: "FoundationKit: Attributed String - Read Any Attribute"
+    message: "Replace `attribute(key, effectiveRange: nil)` with type-safe `attribute(.key, at: index)` method from FoundationKit"
+    regex: "(?-s)(attribute\\(.*, effectiveRange: nil)"
+    severity: warning
+  attributed_string_read_typed_attribute:
+    name: "FoundationKit: Attributed String - Read Typed Attribute"
+    message: "Replace `attribute(.attributeName, at: index)` with specific typed method: `.foregroundColor(at:)`, `.font(at:)`, `.paragraphStyle(at:)`, etc. from FoundationKit"
+    regex: "(?-s)(attribute\\(\\..*, at:.*)"
+    severity: warning
+  attributed_string_add_typed_attribute:
+    name: "FoundationKit: Attributed String - Add Typed Attribute"
+    message: "Replace `addAttribute(.attributeName, value: val, range: range)` with typed method: `.addForegroundColor(val, range:)`, `.addFont(val, range:)`, `.addParagraphStyle(val, range:)`, etc. from FoundationKit"
+    regex: "(?-s)(addAttribute\\(\\..*value:.*range:.*)"
+    severity: warning
+  timer_delays:
+    name: "FoundationKit: Async Delays"
+    message: "Replace `DispatchQueue.main.asyncAfter(deadline: .now() + delay) { code }` with `DispatchQueue.wait(seconds: delay) { code }` or `await DispatchQueue.wait(seconds: delay); code` using FoundationKit's extension on `DispatchQueue`"
+    regex: "(?-s)(\\.asyncAfter\\()"
+    severity: warning
+  switch_to_main_thread:
+    name: "FoundationKit: Switch to Main Thread"
+    message: "Replace `DispatchQueue.main.async { code }` with `Thread.onMain { code }` using FoundationKit's thread utilities"
+    regex: "(?-s)(DispatchQueue.main.async.*)"
+    severity: warning
